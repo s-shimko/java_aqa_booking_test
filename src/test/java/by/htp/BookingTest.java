@@ -23,9 +23,30 @@ public class BookingTest {
 		steps.closeDriver();
 	}
 
-	@Test(description = "Positive Booking Search")
+	@Test(description = "Positive Booking Search", enabled=false)
 	public void positiveBookingSearch() {
-		steps.positiveSearch(SEARCH_PLACE);
+		steps.fillSearchForm(SEARCH_PLACE);
+		steps.verifySearchResults();
+	}
+	
+	@Test(description = "Check Default Presets", enabled=false)
+	public void checkDefaultPresets() {
+		steps.checkDefaultPresets();
+	}
+	
+	@Test(description = "Possibility to check Worktrip checkbox", enabled=false)
+	public void checkWorktrip() {
+		steps.checkWorktrip();
+	}
+	
+	@Test(description = "Date departure automatically set", enabled=false)
+	public void checkDepartureAutomaticallySet() {
+		steps.checkDepartureAutomaticallySet(SEARCH_PLACE);
+	}
+	
+	@Test(description = "Check empty search link", enabled=true)
+	public void checkEmptySearchLink() {
+		steps.checkEmptySearchLink();
 	}
 
 }

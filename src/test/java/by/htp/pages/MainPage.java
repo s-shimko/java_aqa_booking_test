@@ -1,5 +1,7 @@
 package by.htp.pages;
 
+import static org.testng.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,17 +26,26 @@ public class MainPage extends AbstractPage {
 	@FindBy(xpath = "(.//td[@data-id='1514678400000']/span)[1]")
 	private WebElement datePickerDay;
 
-	@FindBy(css = "")
+	@FindBy(xpath = "//*[@id=\"frm\"]/div[3]/div/div[1]/div[2]/div/div/div[1]/div/div[2]")
 	private WebElement dateDeparture;
 
 	@FindBy(css = "select#no_rooms")
 	private WebElement rooms;
+	
+	@FindBy(xpath = ".//select[@id='no_rooms']//option[@selected]")
+	private WebElement roomsDefaultValue;
 
 	@FindBy(css = "select#group_adults")
 	private WebElement adults;
+	
+	@FindBy(xpath = ".//select[@id='group_adults']//option[@selected]")
+	private WebElement adultsDefaultValue;
 
 	@FindBy(css = "select#group_children")
 	private WebElement children;
+	
+	@FindBy(xpath = "//select[@id='group_children']//option[@selected]")
+	private WebElement childrenDefaultValue;
 
 	@FindBy(xpath = "//a[contains(text(), 'New repository')]")
 	private WebElement workTrip;
@@ -42,11 +53,18 @@ public class MainPage extends AbstractPage {
 	@FindBy(css = "div.sb-searchbox__row.u-clearfix span.sb-submit-helper")
 	private WebElement buttonCheckPrice;
 
-	@FindBy(xpath = ".//b[@class='price_font_display_two']")
-	private List<WebElement> searchResultPrices;
-	
 	@FindBy(xpath = ".//li[@data-label='"+ CHOOSE_MINSK +"']")
 	private WebElement chooseMinsk;
+	
+	@FindBy(xpath = ".//input[@name='sb_travel_purpose']")
+	private WebElement checkboxWorktrip;
+	
+	@FindBy(xpath = ".//input[@name='sb_travel_purpose']/..")
+	private WebElement checkboxWorktripText;
+	
+	@FindBy(xpath = "(.//div[@class='fe_banner__message '])[1]")
+	private WebElement emptySearchText;
+	
 
 	public MainPage(WebDriver driver) {
 		super(driver);
@@ -74,12 +92,32 @@ public class MainPage extends AbstractPage {
 			throw new IllegalStateException("This driver does not support JavaScript!");
 		}
 	}
-
-	public void verifySearchResults() {
-		List<WebElement> list = searchResultPrices;
-
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i).getText());
-		}
+	
+	public void checkDefaultPresets() {
+		String adults_dv = adultsDefaultValue.getText();
+		assertEquals(adults_dv, "2");
+		
+		String children_dv = childrenDefaultValue.getText();
+		assertEquals(children_dv, "0");
+		
+		String rooms_dv = roomsDefaultValue.getText();
+		assertEquals(rooms_dv, "1");
 	}
+
+	public void checkWorktrip() {
+		checkboxWorktrip.click();
+		
+		assertEquals(checkboxWorktripText.getText(), "\r\n" + 
+				"Я путешествую по работе");
+	}
+
+	public void checkDepartureText() {
+		assertEquals(dateDeparture.getText(), "понедельник, 1 января 2018");
+	}
+
+	public void checkEmptySearchLink() {
+		assertEquals(emptySearchText.getText(), "Чтобы начать поиск, введите направление.");
+	}
+
+
 }
